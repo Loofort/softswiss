@@ -1,0 +1,176 @@
+swagger: "2.0"
+info:
+  description: example of RESTful service. The service is able to manage accounts including money transfer.
+  title: Banking Servcie
+  version: 1.0.0
+produces:
+- application/json
+consumes:
+- application/json
+schemes:
+- http
+paths:
+  /account:
+    get:
+      tags:
+        - resource
+      summary: returns the account list
+      operationId: accountList
+      responses:
+        200:
+          description: list the accounts
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/account"
+        default:
+          $ref: "#/responses/error"
+    post:
+      tags:
+        - resource
+      summary: create a new account
+      operationId: accountRegistartion
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - amount
+            properties:
+              amount:
+                description: money amount
+                type: number
+                format: float
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/account"
+        default:
+          $ref: "#/responses/error"
+  /account/{id}:
+    parameters:
+      - name: id
+        description: account id
+        type: integer
+        format: int64
+        in: path
+        required: true
+    get:
+      tags:
+        - resource
+      summary: get info about particular account
+      operationId: accountItem
+      responses:
+        200:
+          description: show account info
+          schema:
+            $ref: "#/definitions/account"
+        default:
+          $ref: "#/responses/error"
+  /deposit:
+    post:
+      tags:
+        - command
+      summary: money deposit
+      operationId: deposit
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/account"
+      responses:
+        200:
+          description: Ok
+          schema:
+            $ref: "#/definitions/account"
+        default:
+          $ref: "#/responses/error"
+  /withdraw:
+    post:
+      tags:
+        - command
+      summary: money withdraw
+      operationId: withdraw
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/account"
+      responses:
+        200:
+          description: Ok
+          schema:
+            $ref: "#/definitions/account"
+        default:
+          $ref: "#/responses/error"
+  /transfer:
+    post:
+      tags:
+        - command
+      summary: transfer money from one account to another
+      operationId: transfer
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/transfer"
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/account"
+        default:
+          $ref: "#/responses/error"
+responses:
+  error:
+    description: unexpected error
+    schema:
+      $ref: "#/definitions/error"
+definitions:
+  account:
+    type: object
+    required:
+      - amount
+    properties:
+      id:
+        description: account id 
+        type: integer
+        format: int64
+      amount:
+        description: money amount
+        type: number
+        format: float
+  transfer:
+    type: object
+    required:
+      - amount
+      - from
+      - to
+    properties:
+      amount:
+        description: amount of money to transfer
+        type: number
+        format: float
+        minimum: 1
+      from:
+        description: source account id 
+        type: integer
+        format: int64
+      to:
+        description: destination account id 
+        type: integer
+        format: int64
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
