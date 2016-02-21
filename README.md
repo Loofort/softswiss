@@ -6,3 +6,12 @@ The base concept is to devide all endpoints into two types (on swagger page they
 
 1. endpoints providing direct access to low level resources (aka db tabels)
 2. endpoints providing interface to business processes, like posting a command to start particular process. 
+
+## how to run
+to load all dependency go to project folder and run
+
+    go get ./...
+    
+to run the server then type:
+
+    go run cmd/bank-server/*
