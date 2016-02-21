@@ -75,12 +75,15 @@ func (o *AccountItemNotFound) WriteResponse(rw http.ResponseWriter, producer htt
 	}
 }
 
-/*AccountItemDefault account item default
+/*AccountItemDefault unexpected error
 
 swagger:response accountItemDefault
 */
 type AccountItemDefault struct {
 	_statusCode int
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
 }
 
 // NewAccountItemDefault creates AccountItemDefault with default headers values
@@ -100,8 +103,19 @@ func (o *AccountItemDefault) WithStatusCode(code int) *AccountItemDefault {
 	return o
 }
 
+// WithPayload adds the payload to the account item default response
+func (o *AccountItemDefault) WithPayload(payload *models.Error) *AccountItemDefault {
+	o.Payload = payload
+	return o
+}
+
 // WriteResponse to the client
 func (o *AccountItemDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
 }

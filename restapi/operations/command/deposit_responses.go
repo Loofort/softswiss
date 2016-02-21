@@ -43,12 +43,47 @@ func (o *DepositOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Produ
 	}
 }
 
-/*DepositDefault deposit default
+/*DepositNotFound account not found info
+
+swagger:response depositNotFound
+*/
+type DepositNotFound struct {
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewDepositNotFound creates DepositNotFound with default headers values
+func NewDepositNotFound() *DepositNotFound {
+	return &DepositNotFound{}
+}
+
+// WithPayload adds the payload to the deposit not found response
+func (o *DepositNotFound) WithPayload(payload *models.Error) *DepositNotFound {
+	o.Payload = payload
+	return o
+}
+
+// WriteResponse to the client
+func (o *DepositNotFound) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+
+	rw.WriteHeader(404)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
+/*DepositDefault unexpected error
 
 swagger:response depositDefault
 */
 type DepositDefault struct {
 	_statusCode int
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
 }
 
 // NewDepositDefault creates DepositDefault with default headers values
@@ -68,8 +103,19 @@ func (o *DepositDefault) WithStatusCode(code int) *DepositDefault {
 	return o
 }
 
+// WithPayload adds the payload to the deposit default response
+func (o *DepositDefault) WithPayload(payload *models.Error) *DepositDefault {
+	o.Payload = payload
+	return o
+}
+
 // WriteResponse to the client
 func (o *DepositDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
 }

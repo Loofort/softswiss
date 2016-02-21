@@ -43,12 +43,15 @@ func (o *AccountRegistartionCreated) WriteResponse(rw http.ResponseWriter, produ
 	}
 }
 
-/*AccountRegistartionDefault account registartion default
+/*AccountRegistartionDefault unexpected error
 
 swagger:response accountRegistartionDefault
 */
 type AccountRegistartionDefault struct {
 	_statusCode int
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
 }
 
 // NewAccountRegistartionDefault creates AccountRegistartionDefault with default headers values
@@ -68,8 +71,19 @@ func (o *AccountRegistartionDefault) WithStatusCode(code int) *AccountRegistarti
 	return o
 }
 
+// WithPayload adds the payload to the account registartion default response
+func (o *AccountRegistartionDefault) WithPayload(payload *models.Error) *AccountRegistartionDefault {
+	o.Payload = payload
+	return o
+}
+
 // WriteResponse to the client
 func (o *AccountRegistartionDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
 }

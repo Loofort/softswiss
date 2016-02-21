@@ -43,12 +43,47 @@ func (o *WithdrawOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Prod
 	}
 }
 
-/*WithdrawDefault withdraw default
+/*WithdrawNotFound account not found info
+
+swagger:response withdrawNotFound
+*/
+type WithdrawNotFound struct {
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewWithdrawNotFound creates WithdrawNotFound with default headers values
+func NewWithdrawNotFound() *WithdrawNotFound {
+	return &WithdrawNotFound{}
+}
+
+// WithPayload adds the payload to the withdraw not found response
+func (o *WithdrawNotFound) WithPayload(payload *models.Error) *WithdrawNotFound {
+	o.Payload = payload
+	return o
+}
+
+// WriteResponse to the client
+func (o *WithdrawNotFound) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+
+	rw.WriteHeader(404)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
+/*WithdrawDefault unexpected error
 
 swagger:response withdrawDefault
 */
 type WithdrawDefault struct {
 	_statusCode int
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
 }
 
 // NewWithdrawDefault creates WithdrawDefault with default headers values
@@ -68,8 +103,19 @@ func (o *WithdrawDefault) WithStatusCode(code int) *WithdrawDefault {
 	return o
 }
 
+// WithPayload adds the payload to the withdraw default response
+func (o *WithdrawDefault) WithPayload(payload *models.Error) *WithdrawDefault {
+	o.Payload = payload
+	return o
+}
+
 // WriteResponse to the client
 func (o *WithdrawDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
 }

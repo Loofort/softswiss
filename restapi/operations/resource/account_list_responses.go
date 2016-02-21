@@ -42,12 +42,15 @@ func (o *AccountListOK) WriteResponse(rw http.ResponseWriter, producer httpkit.P
 
 }
 
-/*AccountListDefault account list default
+/*AccountListDefault unexpected error
 
 swagger:response accountListDefault
 */
 type AccountListDefault struct {
 	_statusCode int
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
 }
 
 // NewAccountListDefault creates AccountListDefault with default headers values
@@ -67,8 +70,19 @@ func (o *AccountListDefault) WithStatusCode(code int) *AccountListDefault {
 	return o
 }
 
+// WithPayload adds the payload to the account list default response
+func (o *AccountListDefault) WithPayload(payload *models.Error) *AccountListDefault {
+	o.Payload = payload
+	return o
+}
+
 // WriteResponse to the client
 func (o *AccountListDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
 }

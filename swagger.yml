@@ -24,7 +24,9 @@ paths:
             items:
               $ref: "#/definitions/account"
         default:
-          $ref: "#/responses/error"
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/error"
     post:
       tags:
         - resource
@@ -48,7 +50,9 @@ paths:
           schema:
             $ref: "#/definitions/account"
         default:
-          $ref: "#/responses/error"
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/error"
   /account/{id}:
     parameters:
       - name: id
@@ -72,7 +76,9 @@ paths:
           schema:
             $ref: "#/definitions/error"
         default:
-          $ref: "#/responses/error"
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/error"
   /deposit:
     post:
       tags:
@@ -89,8 +95,14 @@ paths:
           description: return account info with total money amount
           schema:
             $ref: "#/definitions/account"
+        404:
+          description: account not found info
+          schema:
+            $ref: "#/definitions/error"
         default:
-          $ref: "#/responses/error"
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/error"
   /withdraw:
     post:
       tags:
@@ -107,8 +119,14 @@ paths:
           description: return account info with total money amount
           schema:
             $ref: "#/definitions/account"
+        404:
+          description: account not found info
+          schema:
+            $ref: "#/definitions/error"
         default:
-          $ref: "#/responses/error"
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/error"
   /transfer:
     post:
       tags:
@@ -127,13 +145,14 @@ paths:
             type: array
             items:
               $ref: "#/definitions/account"
+        404:
+          description: account not found info
+          schema:
+            $ref: "#/definitions/error"
         default:
-          $ref: "#/responses/error"
-responses:
-  error:
-    description: unexpected error
-    schema:
-      $ref: "#/definitions/error"
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/error"
 definitions:
   account:
     type: object
