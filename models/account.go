@@ -22,8 +22,10 @@ type Account struct {
 	Amount float32 `json:"amount,omitempty"`
 
 	/* account id
-	 */
-	ID *int64 `json:"id,omitempty"`
+
+	Required: true
+	*/
+	ID int64 `json:"id,omitempty"`
 }
 
 // Validate validates this account
@@ -31,6 +33,11 @@ func (m *Account) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAmount(formats); err != nil {
+		// prop
+		res = append(res, err)
+	}
+
+	if err := m.validateID(formats); err != nil {
 		// prop
 		res = append(res, err)
 	}
@@ -44,6 +51,15 @@ func (m *Account) Validate(formats strfmt.Registry) error {
 func (m *Account) validateAmount(formats strfmt.Registry) error {
 
 	if err := validate.Required("amount", "body", float32(m.Amount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Account) validateID(formats strfmt.Registry) error {
+
+	if err := validate.Required("id", "body", int64(m.ID)); err != nil {
 		return err
 	}
 

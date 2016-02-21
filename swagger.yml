@@ -139,6 +139,7 @@ definitions:
     type: object
     required:
       - amount
+      - id
     properties:
       id:
         description: account id 
