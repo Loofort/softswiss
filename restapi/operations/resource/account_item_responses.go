@@ -43,6 +43,38 @@ func (o *AccountItemOK) WriteResponse(rw http.ResponseWriter, producer httpkit.P
 	}
 }
 
+/*AccountItemNotFound account not found info
+
+swagger:response accountItemNotFound
+*/
+type AccountItemNotFound struct {
+
+	// In: body
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewAccountItemNotFound creates AccountItemNotFound with default headers values
+func NewAccountItemNotFound() *AccountItemNotFound {
+	return &AccountItemNotFound{}
+}
+
+// WithPayload adds the payload to the account item not found response
+func (o *AccountItemNotFound) WithPayload(payload *models.Error) *AccountItemNotFound {
+	o.Payload = payload
+	return o
+}
+
+// WriteResponse to the client
+func (o *AccountItemNotFound) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+
+	rw.WriteHeader(404)
+	if o.Payload != nil {
+		if err := producer.Produce(rw, o.Payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
 /*AccountItemDefault account item default
 
 swagger:response accountItemDefault

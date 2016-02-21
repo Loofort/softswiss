@@ -11,7 +11,7 @@ import (
 	"github.com/loofort/softswiss/models"
 )
 
-/*WithdrawOK Ok
+/*WithdrawOK return account info with total money amount
 
 swagger:response withdrawOK
 */

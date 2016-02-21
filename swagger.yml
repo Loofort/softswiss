@@ -67,6 +67,10 @@ paths:
           description: show account info
           schema:
             $ref: "#/definitions/account"
+        404:
+          description: account not found info
+          schema:
+            $ref: "#/definitions/error"
         default:
           $ref: "#/responses/error"
   /deposit:
@@ -82,7 +86,7 @@ paths:
             $ref: "#/definitions/account"
       responses:
         200:
-          description: Ok
+          description: return account info with total money amount
           schema:
             $ref: "#/definitions/account"
         default:
@@ -100,7 +104,7 @@ paths:
             $ref: "#/definitions/account"
       responses:
         200:
-          description: Ok
+          description: return account info with total money amount
           schema:
             $ref: "#/definitions/account"
         default:
@@ -118,7 +122,7 @@ paths:
             $ref: "#/definitions/transfer"
       responses:
         200:
-          description: Ok
+          description: return accounts info with total money amount
           schema:
             type: array
             items:

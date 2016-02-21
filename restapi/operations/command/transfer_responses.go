@@ -11,7 +11,7 @@ import (
 	"github.com/loofort/softswiss/models"
 )
 
-/*TransferOK Ok
+/*TransferOK return accounts info with total money amount
 
 swagger:response transferOK
 */
