@@ -160,7 +160,7 @@ func cmdTransferHandler(params command.TransferParams, stg storage.Tx) middlewar
 		return command.NewTransferDefault(0).WithPayload(&models.Error{err.Error()})
 	}
 
-	to.Amount -= params.Body.Amount
+	to.Amount += params.Body.Amount
 	if err := stg.AccountUpdate(to); err != nil {
 		return command.NewTransferDefault(0).WithPayload(&models.Error{err.Error()})
 	}
