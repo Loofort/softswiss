@@ -168,6 +168,7 @@ definitions:
         description: money amount
         type: number
         format: float
+        minimum: 1
   transfer:
     type: object
     required:

@@ -18,6 +18,7 @@ type Account struct {
 	/* money amount
 
 	Required: true
+	Minimum: 1
 	*/
 	Amount float32 `json:"amount,omitempty"`
 
@@ -51,6 +52,10 @@ func (m *Account) Validate(formats strfmt.Registry) error {
 func (m *Account) validateAmount(formats strfmt.Registry) error {
 
 	if err := validate.Required("amount", "body", float32(m.Amount)); err != nil {
+		return err
+	}
+
+	if err := validate.Minimum("amount", "body", float64(m.Amount), 1, false); err != nil {
 		return err
 	}
 
