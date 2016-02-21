@@ -70,7 +70,7 @@ func (s *Storage) AccountInsert(acc *models.Account) (*models.Account, error) {
 	return clone(newacc), nil
 }
 
-func (s *Storage) AccountSet(acc *models.Account) error {
+func (s *Storage) AccountUpdate(acc *models.Account) error {
 	s.Lock()
 	defer s.Unlock()
 
@@ -84,8 +84,8 @@ func (s *Storage) AccountSet(acc *models.Account) error {
 }
 
 // return fake transaction
-func (s *Storage) Beginx() (Tx, error) {
-	return Tx{s}, nil
+func (s *Storage) Begin() Tx {
+	return Tx{s}
 }
 
 type Tx struct {
