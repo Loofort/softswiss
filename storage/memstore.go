@@ -39,10 +39,11 @@ func (s *Storage) AccountItem(id int64) (*models.Account, error) {
 	s.RLock()
 	defer s.RUnlock()
 
-	if id >= int64(len(s.db)) || id < 0 {
+	if id > int64(len(s.db)) || id < 1 {
 		return nil, notFound(fmt.Sprintf("account id=%d is not found", id))
 	}
 
+	id--
 	return clone(s.db[id]), nil
 }
 
@@ -63,7 +64,7 @@ func (s *Storage) AccountInsert(acc *models.Account) (*models.Account, error) {
 	defer s.Unlock()
 
 	newacc := clone(acc)
-	newacc.ID = int64(len(s.db))
+	newacc.ID = int64(len(s.db)) + 1
 
 	s.db = append(s.db, newacc)
 
@@ -75,10 +76,11 @@ func (s *Storage) AccountUpdate(acc *models.Account) error {
 	defer s.Unlock()
 
 	id := acc.ID
-	if id >= int64(len(s.db)) || id < 0 {
+	if id > int64(len(s.db)) || id < 1 {
 		return notFound(fmt.Sprintf("account id=%d is not found", id))
 	}
 
+	id--
 	*s.db[id] = *acc
 	return nil
 }
